@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【TDAイベント】エレガントディナー 出欠フォーム</title>
+<style>
+  :root{
+    --accent:#0f6cbd;          /* Microsoft Forms 風アクセント */
+    --accent-dark:#0a4f8a;
+    --bg:#f3f2f1;
+    --card:#ffffff;
+    --line:#e1dfdd;
+    --text:#242424;
+    --muted:#605e5c;
+    --req:#a4262c;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Segoe UI","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:24px 16px 64px;}
+
+  /* ヘッダー帯 */
+  .banner{
+    height:8px;border-radius:8px 8px 0 0;
+    background:linear-gradient(90deg,var(--accent),var(--accent-dark));
+  }
+  .header-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-top:none;
+    border-radius:0 0 8px 8px;
+    padding:28px 28px 24px;
+    margin-bottom:18px;
+    box-shadow:0 1px 2px rgba(0,0,0,.06);
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size:12px;letter-spacing:.12em;font-weight:600;
+    color:var(--accent);text-transform:uppercase;margin-bottom:10px;
+  }
+  h1{font-size:24px;line-height:1.4;margin:0 0 14px;font-weight:600;}
+  .meta{font-size:14px;color:var(--muted);line-height:1.9;}
+  .meta b{color:var(--text);font-weight:600;}
+  .meta a{color:var(--accent);text-decoration:none;}
+  .meta a:hover{text-decoration:underline;}
+  .note{
+    margin-top:16px;font-size:13px;color:var(--muted);
+    border-top:1px solid var(--line);padding-top:14px;
+  }
+
+  /* 質問カード */
+  .q{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:22px 24px;
+    margin-bottom:14px;
+    box-shadow:0 1px 2px rgba(0,0,0,.04);
+  }
+  .q-title{font-size:15px;font-weight:600;margin:0 0 4px;line-height:1.6;}
+  .req{color:var(--req);margin-left:4px;}
+  .q-sub{font-size:13px;color:var(--muted);margin:0 0 14px;line-height:1.6;}
+
+  input[type=text],
+  input[type=email],
+  input[type=tel],
+  textarea,
+  select{
+    width:100%;
+    border:none;
+    border-bottom:1px solid #8a8886;
+    background:transparent;
+    padding:8px 2px;
+    font-size:15px;font-family:inherit;color:var(--text);
+    outline:none;transition:border-color .15s;
+  }
+  input::placeholder,textarea::placeholder{color:#a19f9d;}
+  input:focus,textarea:focus,select:focus{border-bottom:2px solid var(--accent);}
+  textarea{resize:vertical;min-height:64px;border:1px solid #8a8886;border-radius:4px;padding:10px;}
+  select{border:1px solid #8a8886;border-radius:4px;padding:9px;}
+
+  .opt{display:flex;align-items:flex-start;gap:10px;padding:9px 0;cursor:pointer;font-size:15px;}
+  .opt input{margin-top:3px;accent-color:var(--accent);width:16px;height:16px;flex:none;}
+
+  .row{display:flex;gap:16px;flex-wrap:wrap;}
+  .row>div{flex:1;min-width:200px;}
+
+  .submit-bar{margin-top:22px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+  button{
+    background:var(--accent);color:#fff;border:none;border-radius:4px;
+    padding:11px 30px;font-size:15px;font-weight:600;cursor:pointer;
+    font-family:inherit;transition:background .15s;
+  }
+  button:hover{background:var(--accent-dark);}
+  .reset{background:transparent;color:var(--accent);font-weight:500;padding:11px 8px;}
+  .reset:hover{background:transparent;text-decoration:underline;}
+
+  .footer{margin-top:20px;font-size:12px;color:var(--muted);text-align:center;line-height:1.7;}
+
+  /* 完了メッセージ */
+  #done{
+    display:none;background:var(--card);border:1px solid var(--line);border-radius:8px;
+    padding:48px 28px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,.06);
+  }
+  #done .check{font-size:44px;color:var(--accent);margin-bottom:10px;}
+  #done h2{font-size:20px;margin:0 0 8px;font-weight:600;}
+  #done p{color:var(--muted);font-size:14px;margin:0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== ヘッダー ===== -->
+  <div class="banner"></div>
+  <div class="header-card">
+    <span class="eyebrow">TDA イベント</span>
+    <h1>エレガントディナー 出欠のご案内</h1>
+    <div class="meta">
+      <div>📅 <b>開催日</b>：2026年7月3日（金）</div>
+      <div>🕕 <b>時間</b>：18:00 受付開始 ／ 18:30 開宴（予定）</div>
+      <div>📍 <b>会場</b>：Janu Grill（ジャヌ グリル）／ Janu Tokyo</div>
+      <div>　　〒106-0041 東京都港区麻布台1-2-2 ・ <a href="https://www.janu.com/janu-tokyo/ja/janu-grill/" target="_blank" rel="noopener">会場ページ</a></div>
+    </div>
+    <div class="note">
+      ご出席の可否を <b>2026年6月26日（金）</b> までにご回答ください。<span class="req">*</span> は必須項目です。
+    </div>
+  </div>
+
+  <!-- ===== フォーム本体 ===== -->
+  <form id="form">
+
+    <!-- 氏名 -->
+    <div class="q">
+      <p class="q-title">お名前<span class="req">*</span></p>
+      <input type="text" name="name" placeholder="例）麻布台 太郎" required>
+    </div>
+
+    <!-- 所属 -->
+    <div class="q">
+      <p class="q-title">所属・部署<span class="req">*</span></p>
+      <input type="text" name="org" placeholder="例）〇〇本部 △△部" required>
+    </div>
+
+    <!-- 連絡先 -->
+    <div class="q">
+      <p class="q-title">ご連絡先</p>
+      <p class="q-sub">当日のご連絡用に、メールアドレスまたは電話番号をご記入ください。</p>
+      <div class="row">
+        <div>
+          <input type="email" name="email" placeholder="メールアドレス" required>
+        </div>
+        <div>
+          <input type="tel" name="tel" placeholder="電話番号（任意）">
+        </div>
+      </div>
+    </div>
+
+    <!-- 出欠 -->
+    <div class="q">
+      <p class="q-title">ご出欠<span class="req">*</span></p>
+      <label class="opt"><input type="radio" name="attend" value="出席" required>出席します</label>
+      <label class="opt"><input type="radio" name="attend" value="欠席">欠席します</label>
+      <label class="opt"><input type="radio" name="attend" value="未定">調整中（追ってご連絡します）</label>
+    </div>
+
+    <!-- 参加人数 -->
+    <div class="q">
+      <p class="q-title">参加人数</p>
+      <p class="q-sub">ご本人を含む参加人数をお選びください（同伴者がいる場合）。</p>
+      <select name="count">
+        <option value="">選択してください</option>
+        <option value="1">1名（本人のみ）</option>
+        <option value="2">2名</option>
+        <option value="3">3名</option>
+        <option value="4">4名以上</option>
+      </select>
+    </div>
+
+    <!-- 食事制限 -->
+    <div class="q">
+      <p class="q-title">食事制限・アレルギー</p>
+      <p class="q-sub">当てはまるものをすべてお選びください。詳細は自由記述欄にご記入ください。</p>
+      <label class="opt"><input type="checkbox" name="diet" value="特になし">特になし</label>
+      <label class="opt"><input type="checkbox" name="diet" value="アレルギーあり">食物アレルギーあり</label>
+      <label class="opt"><input type="checkbox" name="diet" value="ベジタリアン">ベジタリアン</label>
+      <label class="opt"><input type="checkbox" name="diet" value="ヴィーガン">ヴィーガン</label>
+      <label class="opt"><input type="checkbox" name="diet" value="ハラル">ハラル</label>
+      <label class="opt"><input type="checkbox" name="diet" value="苦手な食材あり">苦手な食材あり</label>
+    </div>
+
+    <!-- 食事制限 詳細 -->
+    <div class="q">
+      <p class="q-title">食事制限・アレルギーの詳細</p>
+      <p class="q-sub">具体的な食材・症状などがあればご記入ください。</p>
+      <textarea name="diet_detail" placeholder="例）甲殻類アレルギー、わさび苦手 など"></textarea>
+    </div>
+
+    <!-- 連絡事項 -->
+    <div class="q">
+      <p class="q-title">ご要望・ご連絡事項</p>
+      <textarea name="comment" placeholder="ご質問や事務局へのご連絡があればご記入ください"></textarea>
+    </div>
+
+    <div class="submit-bar">
+      <button type="submit">送信</button>
+      <button type="reset" class="reset">フォームをクリア</button>
+    </div>
+  </form>
+
+  <!-- 完了画面 -->
+  <div id="done">
+    <div class="check">✓</div>
+    <h2>ご回答ありがとうございました</h2>
+    <p>出欠のご登録を受け付けました。当日のご参加を心よりお待ちしております。</p>
+  </div>
+
+  <div class="footer">
+    本フォームはイベント出欠確認用です。<br>
+    ご不明な点は TDA イベント事務局までお問い合わせください。
+  </div>
+
+</div>
+
+<script>
+  // ※ このHTMLは単体表示用のひな型です。送信先（メール/スプレッドシート/サーバー等）は別途設定が必要です。
+  document.getElementById('form').addEventListener('submit', function(e){
+    e.preventDefault();
+    // ▼ 実運用では、ここで fetch() による送信処理などを追加してください。
+    document.getElementById('form').style.display = 'none';
+    document.querySelectorAll('.q,.submit-bar').forEach(function(el){el.style.display='none';});
+    document.getElementById('done').style.display = 'block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+</script>
+</body>
+</html>
