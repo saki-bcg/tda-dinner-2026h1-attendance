@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>【TDAイベント】エレガントディナー 出欠フォーム</title>
+<title>7月3日(金)【TDAイベント】エレガントディナー</title>
 <style>
   :root{
     --accent:#0f6cbd;          /* Microsoft Forms 風アクセント */
@@ -39,12 +39,7 @@
     margin-bottom:18px;
     box-shadow:0 1px 2px rgba(0,0,0,.06);
   }
-  .eyebrow{
-    display:inline-block;
-    font-size:12px;letter-spacing:.12em;font-weight:600;
-    color:var(--accent);text-transform:uppercase;margin-bottom:10px;
-  }
-  h1{font-size:24px;line-height:1.4;margin:0 0 14px;font-weight:600;}
+  h1{font-size:24px;line-height:1.45;margin:0 0 14px;font-weight:600;}
   .meta{font-size:14px;color:var(--muted);line-height:1.9;}
   .meta b{color:var(--text);font-weight:600;}
   .meta a{color:var(--accent);text-decoration:none;}
@@ -119,8 +114,7 @@
   <!-- ===== ヘッダー ===== -->
   <div class="banner"></div>
   <div class="header-card">
-    <span class="eyebrow">TDA イベント</span>
-    <h1>エレガントディナー 出欠のご案内</h1>
+    <h1>7月3日(金)【TDAイベント】エレガントディナー</h1>
     <div class="meta">
       <div>📅 <b>開催日</b>：2026年7月3日（金）</div>
       <div>🕕 <b>時間</b>：18:00 受付開始 ／ 18:30 開宴（予定）</div>
@@ -228,10 +222,10 @@
 </div>
 
 <script>
-  // ※ このHTMLは単体表示用のひな型です。送信先（メール/スプレッドシート/サーバー等）は別途設定が必要です。
+  // ※ このHTMLは単体表示用のひな型です。送信先（Googleフォーム等）は別途設定が必要です。
   document.getElementById('form').addEventListener('submit', function(e){
     e.preventDefault();
-    // ▼ 実運用では、ここで fetch() による送信処理などを追加してください。
+    // ▼ 実運用では、ここで Googleフォームの formResponse への送信処理を追加してください。
     document.getElementById('form').style.display = 'none';
     document.querySelectorAll('.q,.submit-bar').forEach(function(el){el.style.display='none';});
     document.getElementById('done').style.display = 'block';
