@@ -123,7 +123,12 @@
   </div>
 
   <!-- ===== フォーム本体 ===== -->
-  <form id="form">
+  <!-- Netlify Forms: name で識別 / honeypot でbot対策 -->
+  <form id="form" name="tda-dinner-2026h1" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <!-- Netlify がフォーム名を識別するための必須hidden -->
+    <input type="hidden" name="form-name" value="tda-dinner-2026h1">
+    <!-- bot対策（人間には非表示） -->
+    <p style="display:none;"><label>このフィールドは記入しないでください: <input name="bot-field"></label></p>
 
     <!-- 氏名 -->
     <div class="q">
@@ -192,8 +197,8 @@
 </div>
 
 <script>
-  // ※ このHTMLは単体表示用のひな型です。送信先（Googleフォーム等）は別途設定が必要です。
-  // ※ 重複名チェックは「この端末で過去に送信した名前」のみが対象です（他端末・他者の登録は検知できません＝バックエンドが必要）。
+  // ※ 回答は Netlify Forms（フォーム名 tda-dinner-2026h1）に送信され、Netlify管理画面で確認できます。
+  // ※ 重複名チェックは「この端末で過去に送信した名前」のみが対象です（他端末・他者の登録は検知できません）。
   var STORE_KEY = 'tda_dinner_2026h1_registered_names';
 
   function getRegistered(){
@@ -218,7 +223,17 @@
   // フォームクリア時も非表示に戻す
   document.getElementById('form').addEventListener('reset', function(){ arrivalQ.style.display = 'none'; });
 
-  document.getElementById('form').addEventListener('submit', function(e){
+  var formEl = document.getElementById('form');
+
+  // 完了画面を表示
+  function showDone(){
+    formEl.style.display = 'none';
+    document.querySelectorAll('.q,.submit-bar').forEach(function(el){el.style.display='none';});
+    document.getElementById('done').style.display = 'block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  formEl.addEventListener('submit', function(e){
     e.preventDefault();
 
     var name = (document.querySelector('[name=name]').value || '').trim();
@@ -229,14 +244,26 @@
       if (!ok){ return; }   // キャンセルなら送信しない
     }
 
-    // ▼ 実運用では、ここで Googleフォームの formResponse 等への送信処理を追加してください。
+    // --- Netlify Forms へ実際に送信 ---
+    var data = new FormData(formEl);
+    var body = new URLSearchParams(data).toString();
+    var submitBtn = formEl.querySelector('button[type=submit]');
+    if (submitBtn){ submitBtn.disabled = true; submitBtn.textContent = '送信中…'; }
 
-    if (name){ addRegistered(name); }
-
-    document.getElementById('form').style.display = 'none';
-    document.querySelectorAll('.q,.submit-bar').forEach(function(el){el.style.display='none';});
-    document.getElementById('done').style.display = 'block';
-    window.scrollTo({top:0,behavior:'smooth'});
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
+    })
+    .then(function(res){
+      if (!res.ok){ throw new Error('HTTP ' + res.status); }
+      if (name){ addRegistered(name); }
+      showDone();
+    })
+    .catch(function(err){
+      if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = '送信'; }
+      alert('送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。\n（' + err.message + '）');
+    });
   });
 </script>
 </body>
