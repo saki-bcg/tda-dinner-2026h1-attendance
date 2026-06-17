@@ -64,7 +64,6 @@
 
   input[type=text],
   input[type=email],
-  input[type=tel],
   textarea,
   select{
     width:100%;
@@ -82,9 +81,6 @@
 
   .opt{display:flex;align-items:flex-start;gap:10px;padding:9px 0;cursor:pointer;font-size:15px;}
   .opt input{margin-top:3px;accent-color:var(--accent);width:16px;height:16px;flex:none;}
-
-  .row{display:flex;gap:16px;flex-wrap:wrap;}
-  .row>div{flex:1;min-width:200px;}
 
   .submit-bar{margin-top:22px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
   button{
@@ -117,7 +113,7 @@
     <h1>7月3日(金)【TDAイベント】エレガントディナー</h1>
     <div class="meta">
       <div>📅 <b>開催日</b>：2026年7月3日（金）</div>
-      <div>🕕 <b>時間</b>：18:00 受付開始 ／ 18:30 開宴（予定）</div>
+      <div>🕖 <b>時間</b>：19:00 開場 ／ 19:30 開始</div>
       <div>📍 <b>会場</b>：Janu Grill（ジャヌ グリル）／ Janu Tokyo</div>
       <div>　　〒106-0041 東京都港区麻布台1-2-2 ・ <a href="https://www.janu.com/janu-tokyo/ja/janu-grill/" target="_blank" rel="noopener">会場ページ</a></div>
     </div>
@@ -135,24 +131,17 @@
       <input type="text" name="name" placeholder="例）麻布台 太郎" required>
     </div>
 
-    <!-- 所属 -->
+    <!-- Cohort -->
     <div class="q">
-      <p class="q-title">所属・部署<span class="req">*</span></p>
-      <input type="text" name="org" placeholder="例）〇〇本部 △△部" required>
+      <p class="q-title">Cohort<span class="req">*</span></p>
+      <input type="text" name="cohort" placeholder="例）Cohort 5" required>
     </div>
 
-    <!-- 連絡先 -->
+    <!-- 連絡先（メールのみ） -->
     <div class="q">
-      <p class="q-title">ご連絡先</p>
-      <p class="q-sub">当日のご連絡用に、メールアドレスまたは電話番号をご記入ください。</p>
-      <div class="row">
-        <div>
-          <input type="email" name="email" placeholder="メールアドレス" required>
-        </div>
-        <div>
-          <input type="tel" name="tel" placeholder="電話番号（任意）">
-        </div>
-      </div>
+      <p class="q-title">メールアドレス<span class="req">*</span></p>
+      <p class="q-sub">当日のご連絡用に、メールアドレスをご記入ください。</p>
+      <input type="email" name="email" placeholder="メールアドレス" required>
     </div>
 
     <!-- 出欠 -->
@@ -160,38 +149,12 @@
       <p class="q-title">ご出欠<span class="req">*</span></p>
       <label class="opt"><input type="radio" name="attend" value="出席" required>出席します</label>
       <label class="opt"><input type="radio" name="attend" value="欠席">欠席します</label>
-      <label class="opt"><input type="radio" name="attend" value="未定">調整中（追ってご連絡します）</label>
     </div>
 
-    <!-- 参加人数 -->
-    <div class="q">
-      <p class="q-title">参加人数</p>
-      <p class="q-sub">ご本人を含む参加人数をお選びください（同伴者がいる場合）。</p>
-      <select name="count">
-        <option value="">選択してください</option>
-        <option value="1">1名（本人のみ）</option>
-        <option value="2">2名</option>
-        <option value="3">3名</option>
-        <option value="4">4名以上</option>
-      </select>
-    </div>
-
-    <!-- 食事制限 -->
+    <!-- 食事制限・アレルギー（自由記述のみ） -->
     <div class="q">
       <p class="q-title">食事制限・アレルギー</p>
-      <p class="q-sub">当てはまるものをすべてお選びください。詳細は自由記述欄にご記入ください。</p>
-      <label class="opt"><input type="checkbox" name="diet" value="特になし">特になし</label>
-      <label class="opt"><input type="checkbox" name="diet" value="アレルギーあり">食物アレルギーあり</label>
-      <label class="opt"><input type="checkbox" name="diet" value="ベジタリアン">ベジタリアン</label>
-      <label class="opt"><input type="checkbox" name="diet" value="ヴィーガン">ヴィーガン</label>
-      <label class="opt"><input type="checkbox" name="diet" value="ハラル">ハラル</label>
-      <label class="opt"><input type="checkbox" name="diet" value="苦手な食材あり">苦手な食材あり</label>
-    </div>
-
-    <!-- 食事制限 詳細 -->
-    <div class="q">
-      <p class="q-title">食事制限・アレルギーの詳細</p>
-      <p class="q-sub">具体的な食材・症状などがあればご記入ください。</p>
+      <p class="q-sub">アレルギー・苦手な食材・ベジタリアン等、配慮が必要な点があればご記入ください。</p>
       <textarea name="diet_detail" placeholder="例）甲殻類アレルギー、わさび苦手 など"></textarea>
     </div>
 
@@ -223,9 +186,34 @@
 
 <script>
   // ※ このHTMLは単体表示用のひな型です。送信先（Googleフォーム等）は別途設定が必要です。
+  // ※ 重複名チェックは「この端末で過去に送信した名前」のみが対象です（他端末・他者の登録は検知できません＝バックエンドが必要）。
+  var STORE_KEY = 'tda_dinner_2026h1_registered_names';
+
+  function getRegistered(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); }
+    catch(e){ return []; }
+  }
+  function addRegistered(name){
+    var list = getRegistered();
+    if (list.indexOf(name) === -1){ list.push(name); }
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(list)); } catch(e){}
+  }
+
   document.getElementById('form').addEventListener('submit', function(e){
     e.preventDefault();
-    // ▼ 実運用では、ここで Googleフォームの formResponse への送信処理を追加してください。
+
+    var name = (document.querySelector('[name=name]').value || '').trim();
+
+    // --- 同一端末での重複名チェック ---
+    if (name && getRegistered().indexOf(name) !== -1){
+      var ok = window.confirm('「' + name + '」さんは、この端末から既に登録されています。\nもう一度登録しますか？');
+      if (!ok){ return; }   // キャンセルなら送信しない
+    }
+
+    // ▼ 実運用では、ここで Googleフォームの formResponse 等への送信処理を追加してください。
+
+    if (name){ addRegistered(name); }
+
     document.getElementById('form').style.display = 'none';
     document.querySelectorAll('.q,.submit-bar').forEach(function(el){el.style.display='none';});
     document.getElementById('done').style.display = 'block';
