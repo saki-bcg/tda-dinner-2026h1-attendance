@@ -148,7 +148,15 @@
     <div class="q">
       <p class="q-title">ご出欠<span class="req">*</span></p>
       <label class="opt"><input type="radio" name="attend" value="出席" required>出席します</label>
+      <label class="opt"><input type="radio" name="attend" value="途中参加">途中参加します</label>
       <label class="opt"><input type="radio" name="attend" value="欠席">欠席します</label>
+    </div>
+
+    <!-- 参加予定時刻（途中参加者向け） -->
+    <div class="q">
+      <p class="q-title">参加予定時刻の目安</p>
+      <p class="q-sub">（備考：途中参加の方は参加予定時刻の目安をご記入ください）</p>
+      <input type="text" name="arrival_time" placeholder="例）20:30 頃">
     </div>
 
     <!-- 食事制限・アレルギー（自由記述のみ） -->
