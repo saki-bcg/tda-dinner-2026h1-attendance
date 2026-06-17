@@ -152,8 +152,8 @@
       <label class="opt"><input type="radio" name="attend" value="欠席">欠席します</label>
     </div>
 
-    <!-- 参加予定時刻（途中参加者向け） -->
-    <div class="q">
+    <!-- 参加予定時刻（途中参加者のみ表示） -->
+    <div class="q" id="arrival-q" style="display:none;">
       <p class="q-title">参加予定時刻の目安</p>
       <p class="q-sub">（備考：途中参加の方は参加予定時刻の目安をご記入ください）</p>
       <input type="text" name="arrival_time" placeholder="例）20:30 頃">
@@ -206,6 +206,18 @@
     if (list.indexOf(name) === -1){ list.push(name); }
     try { localStorage.setItem(STORE_KEY, JSON.stringify(list)); } catch(e){}
   }
+
+  // --- 「途中参加」を選んだ時だけ「参加予定時刻の目安」を表示 ---
+  var arrivalQ = document.getElementById('arrival-q');
+  Array.prototype.forEach.call(document.querySelectorAll('input[name=attend]'), function(r){
+    r.addEventListener('change', function(){
+      var show = (document.querySelector('input[name=attend]:checked') || {}).value === '途中参加';
+      arrivalQ.style.display = show ? 'block' : 'none';
+      if (!show){ arrivalQ.querySelector('[name=arrival_time]').value = ''; } // 非表示時は入力をクリア
+    });
+  });
+  // フォームクリア時も非表示に戻す
+  document.getElementById('form').addEventListener('reset', function(){ arrivalQ.style.display = 'none'; });
 
   document.getElementById('form').addEventListener('submit', function(e){
     e.preventDefault();
